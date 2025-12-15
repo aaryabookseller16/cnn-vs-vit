@@ -1,1 +1,7 @@
 data/
+artifacts/
+*.pt
+*.pth
+*.ckpt
+__pycache__/
+.DS_Store
