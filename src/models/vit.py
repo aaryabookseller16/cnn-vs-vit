@@ -17,7 +17,7 @@ class PatchEmbed(nn.Module):
     def forward(self, x):
         # x: (B, 3, 32, 32)
         x = self.proj(x)                 # (B, D, 8, 8)
-        x = x.flatten(2).transpose(1, 2) # (B, 64, D)
+        x = x.flatten(2).transpose(1, 2) # (B, 64, D), collapse 8x8 grid into 64
         return x
         
         
@@ -76,15 +76,19 @@ class TinyViT(nn.Module):
         x = self.patch_embed(x)
         
         B = x.size(0)
+        
+        #image becomes patch tokens
         cls = self.cls_token.expand(B, -1, -1)
         x = torch.cat([cls, x], dim=1)
         
+        #prepend cls to sequence
         x = x + self.pos_embed
         x = self.pos_drop(x)
         
         x = self.encoder(x)
         x = self.norm(x)
         
+        # tranform tokens through attention blocks
         cls_out = x[:, 0]
         logits = self.head(cls_out)
         
