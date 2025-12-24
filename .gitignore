@@ -1,8 +1,47 @@
-data/
-artifacts/
+# ------------------------------
+# Data & experiment artifacts
+# ------------------------------
+/data/
+/artifacts/checkpoints/
+/artifacts/logs/
+/artifacts/stdout/
+/wandb/
+
+# Keep small, presentation-ready outputs
+# (plots & heatmaps are useful to version)
+!artifacts/plots/
+!artifacts/plots/*.png
+!artifacts/plots/*.pdf
+!artifacts/heatmaps/
+!artifacts/heatmaps/*.png
+
+# ------------------------------
+# Model files
+# ------------------------------
 *.pt
 *.pth
 *.ckpt
+
+# ------------------------------
+# Python cache / environments
+# ------------------------------
 __pycache__/
-.DS_Store
+*.pyc
+*.pyo
+*.pyd
+
 .venv/
+venv/
+.env/
+
+# ------------------------------
+# OS / editor noise
+# ------------------------------
+.DS_Store
+.idea/
+.vscode/
+
+# ------------------------------
+# Misc
+# ------------------------------
+*.log

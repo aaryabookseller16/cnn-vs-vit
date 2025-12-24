@@ -67,6 +67,61 @@ These help answer:
 
 ---
 
+## Results
+
+### Summary Table (Representative Results)
+
+The table below summarizes the observed trends from the experiments (single representative seed, same training setup).
+The goal is to highlight **relative behavior**, not to overfit to a single number.
+
+| Model | Data Regime | Convergence Speed | Validation Accuracy | Stability | Key Takeaway |
+|------|------------|-------------------|---------------------|-----------|--------------|
+| CNN  | 10%         | **Fast**          | **High**            | **Stable**| Strong inductive bias enables sample-efficient learning |
+| ViT  | 10%         | Slow              | Lower               | Noisy     | Struggles without scale or pretraining |
+| CNN  | 100%        | Fast              | High                | Stable    | Remains a strong baseline even with more data |
+| ViT  | 100%        | Moderate          | Comparable          | Improved  | Benefits significantly from more data |
+
+*Arrows and descriptors are based on validation curves and qualitative trends shown below.*
+
+---
+
+### Quantitative Performance (Learning Curves)
+
+We evaluate both models under identical conditions (optimizer, augmentations, splits) and compare **validation accuracy across epochs**.
+
+**Key observations:**
+- In the **small-data regime (10%)**, the CNN converges faster and achieves **consistently higher validation accuracy** than the ViT.
+- The Vision Transformer exhibits **higher variance and slower convergence** when trained from scratch with limited data.
+- With **full data (100%)**, the performance gap narrows, but the CNN still reaches strong performance with fewer epochs.
+
+These results reflect architectural inductive bias:
+- CNNs hard-code locality and translation equivariance, which improves **sample efficiency**.
+- ViTs rely on learned attention patterns that typically require **more data or pretraining** to stabilize.
+
+<p align="center">
+  <img src="artifacts/plots/learning_curves.png" width="700" />
+</p>
+
+*Validation accuracy vs. training epoch for CNN and ViT on CIFAR-10 (10% and 100% data, seed=42).* 
+
+---
+
+### Qualitative Analysis (Model Explanations)
+
+To understand *why* the models behave differently, we visualize their internal reasoning:
+
+- **CNN:** Grad-CAM highlights compact, semantically meaningful regions (e.g., object parts), even with limited data.
+- **ViT:** Attention / saliency maps are more diffuse under data scarcity, indicating unstable or under-trained global reasoning.
+
+<p align="center">
+  <img src="artifacts/heatmaps/cnn_img0_pred3.png" width="300" />
+  <img src="artifacts/heatmaps/vit_img0_pred3.png" width="300" />
+</p>
+
+*Example explanation maps for CNN (left) and ViT (right) on the same CIFAR-10 image.*
+
+---
+
 ## Repository Structure
 
 ```
